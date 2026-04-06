@@ -1,7 +1,12 @@
-import { openDatabase, runMigrations } from '@progress-state/shared-sqlite';
+import {
+  ensureWorkspaceEnv,
+  openDatabase,
+  runMigrations,
+} from '@progress-state/shared-sqlite';
 
 import { loadConfig } from './config';
 
+ensureWorkspaceEnv();
 const config = loadConfig();
 const database = openDatabase(config);
 

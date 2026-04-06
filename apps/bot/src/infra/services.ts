@@ -2,6 +2,7 @@ import {
   RoutineService,
   SkillService,
   TaskService,
+  TelegramLinkService,
 } from '@progress-state/shared';
 import {
   openDatabase,
@@ -10,6 +11,7 @@ import {
   SqliteRoutineRepository,
   SqliteSkillRepository,
   SqliteTaskRepository,
+  SqliteTelegramLinkRepository,
   SystemClock,
   UuidGenerator,
 } from '@progress-state/shared-sqlite';
@@ -19,6 +21,7 @@ export type BotServices = {
   taskService: TaskService;
   routineService: RoutineService;
   skillService: SkillService;
+  telegramLinkService: TelegramLinkService;
 };
 
 export type BotRuntime = {
@@ -50,6 +53,11 @@ export const createBotRuntime = (
       ),
       skillService: new SkillService(
         new SqliteSkillRepository(database),
+        idGenerator,
+        clock,
+      ),
+      telegramLinkService: new TelegramLinkService(
+        new SqliteTelegramLinkRepository(database),
         idGenerator,
         clock,
       ),

@@ -74,6 +74,36 @@ const migrations: Migration[] = [
       );
     `,
   },
+  {
+    id: '002_telegram_linking',
+    sql: `
+      CREATE TABLE IF NOT EXISTS processed_updates (
+        update_id INTEGER PRIMARY KEY,
+        processed_at TEXT NOT NULL
+      );
+
+      CREATE TABLE IF NOT EXISTS reminder_runs (
+        kind TEXT NOT NULL,
+        run_date TEXT NOT NULL,
+        executed_at TEXT NOT NULL,
+        PRIMARY KEY (kind, run_date)
+      );
+
+      CREATE TABLE IF NOT EXISTS telegram_link_tokens (
+        code TEXT PRIMARY KEY,
+        created_at TEXT NOT NULL,
+        expires_at TEXT NOT NULL,
+        consumed_at TEXT
+      );
+
+      CREATE TABLE IF NOT EXISTS telegram_links (
+        id INTEGER PRIMARY KEY CHECK (id = 1),
+        chat_id TEXT NOT NULL,
+        user_id TEXT,
+        linked_at TEXT NOT NULL
+      );
+    `,
+  },
 ];
 
 export const runMigrations = (database: SqliteDatabase, now: string) => {

@@ -160,6 +160,23 @@ describe('App', () => {
           } as Response;
         }
 
+        if (url.endsWith('/api/settings/telegram-link')) {
+          return {
+            ok: true,
+            json: async () => ({
+              data: {
+                linkedChat: null,
+                latestLinkToken: {
+                  code: 'AB12CD34',
+                  createdAt: '2026-04-06T10:00:00.000Z',
+                  expiresAt: '2026-04-06T10:30:00.000Z',
+                  consumedAt: null,
+                },
+              },
+            }),
+          } as Response;
+        }
+
         return {
           ok: false,
           json: async () => ({ error: { message: 'Unexpected request' } }),
@@ -280,5 +297,6 @@ describe('App', () => {
     expect(await screen.findByText('Europe/Moscow')).toBeInTheDocument();
     expect((await screen.findAllByText('Yes')).length).toBe(3);
     expect(await screen.findByText('20:00')).toBeInTheDocument();
+    expect(await screen.findByText('AB12CD34')).toBeInTheDocument();
   });
 });

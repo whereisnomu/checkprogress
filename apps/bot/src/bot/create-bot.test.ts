@@ -29,6 +29,13 @@ describe('createBot', () => {
             completionRate: 0,
           }),
         },
+        telegramLinkService: {
+          getLinkStatus: async () => ({
+            linkedChat: null,
+            latestLinkToken: null,
+          }),
+          linkTelegram: async () => undefined,
+        },
       },
     });
 

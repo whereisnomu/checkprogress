@@ -79,6 +79,7 @@ npm.cmd install
 ```
 
 2. Copy `.env.example` to `.env` and fill the required values.
+   The API, bot, and migration scripts load `.env` automatically from the repository root.
 
 3. Run migrations:
 
@@ -103,6 +104,28 @@ npm.cmd run dev --workspace @progress-state/web
 ```bash
 npm.cmd run dev --workspace @progress-state/bot
 ```
+
+## One-Command Startup
+
+To run migrations and start API, web, and bot together in one terminal:
+
+```bash
+npm.cmd run dev:all
+```
+
+On Windows you can also start everything by double-clicking:
+
+```text
+start.bat
+```
+
+This command:
+
+1. runs migrations
+2. starts API
+3. starts web
+4. starts bot
+5. stops child processes when you close the terminal
 
 ## Environment Variables
 

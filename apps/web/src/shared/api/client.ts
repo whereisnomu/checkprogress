@@ -42,6 +42,20 @@ type SystemSettings = {
   dailyReminderTime: string;
 };
 
+type TelegramLinkStatus = {
+  linkedChat: {
+    chatId: string;
+    userId: string | null;
+    linkedAt: string;
+  } | null;
+  latestLinkToken: {
+    code: string;
+    createdAt: string;
+    expiresAt: string;
+    consumedAt: string | null;
+  } | null;
+};
+
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3001';
 
 const parseResponse = async <T>(response: Response): Promise<T> => {
@@ -288,5 +302,26 @@ export const apiClient = {
   async getSystemSettings() {
     const response = await fetch(`${apiBaseUrl}/api/settings/system`);
     return parseResponse<SystemSettings>(response);
+  },
+
+  async getTelegramLinkStatus() {
+    const response = await fetch(`${apiBaseUrl}/api/settings/telegram-link`);
+    return parseResponse<TelegramLinkStatus>(response);
+  },
+
+  async createTelegramLinkCode() {
+    const response = await fetch(`${apiBaseUrl}/api/settings/telegram-link`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({}),
+    });
+
+    return parseResponse<{
+      code: string;
+      createdAt: string;
+      expiresAt: string;
+    }>(response);
   },
 };

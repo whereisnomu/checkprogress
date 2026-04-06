@@ -11,6 +11,8 @@
 7. Optional: enable reminders with `REMINDERS_ENABLED=true` and set `DAILY_REMINDER_TIME=HH:MM`.
 8. Create a SQLite backup with `npm.cmd run backup:sqlite`.
 9. Export dashboard summary and charts with `npm.cmd run export:summary`.
+10. For a single-terminal local startup use `npm.cmd run dev:all`.
+11. On Windows Explorer you can also launch everything by double-clicking `start.bat`.
 
 ## Current State
 

@@ -87,6 +87,12 @@ export const RoutinePanel = ({ variant = 'compact' }: RoutinePanelProps) => {
           </p>
         ) : null}
 
+        {!isLoading && routines.length > 0 ? (
+          <p className="text-sm text-muted-foreground">
+            These routines are shared between the web panel and Telegram bot.
+          </p>
+        ) : null}
+
         <div className="grid gap-3">
           {routines.map((routine) => (
             <div

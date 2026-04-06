@@ -2,13 +2,16 @@ import {
   RoutineService,
   SkillService,
   TaskService,
+  TelegramLinkService,
 } from '@progress-state/shared';
 import {
+  ensureWorkspaceEnv,
   openDatabase,
   runMigrations,
   SqliteRoutineRepository,
   SqliteSkillRepository,
   SqliteTaskRepository,
+  SqliteTelegramLinkRepository,
   SystemClock,
   UuidGenerator,
 } from '@progress-state/shared-sqlite';
@@ -16,6 +19,7 @@ import {
 import { loadConfig } from './infra/config';
 import { createApp } from './server/create-app';
 
+ensureWorkspaceEnv();
 const config = loadConfig();
 const database = openDatabase(config);
 
@@ -37,6 +41,11 @@ const app = createApp({
   ),
   skillService: new SkillService(
     new SqliteSkillRepository(database),
+    idGenerator,
+    clock,
+  ),
+  telegramLinkService: new TelegramLinkService(
+    new SqliteTelegramLinkRepository(database),
     idGenerator,
     clock,
   ),

@@ -51,3 +51,38 @@ export interface IdGenerator {
 export interface Clock {
   now(): string;
 }
+
+export interface TelegramLinkRepository {
+  createLinkToken(token: {
+    code: string;
+    createdAt: string;
+    expiresAt: string;
+    consumedAt: string | null;
+  }): Promise<void>;
+  getActiveLinkToken(
+    code: string,
+    now: string,
+  ): Promise<{
+    code: string;
+    createdAt: string;
+    expiresAt: string;
+    consumedAt: string | null;
+  } | null>;
+  consumeLinkToken(code: string, consumedAt: string): Promise<void>;
+  upsertLinkedChat(link: {
+    chatId: string;
+    userId: string | null;
+    linkedAt: string;
+  }): Promise<void>;
+  getLinkedChat(): Promise<{
+    chatId: string;
+    userId: string | null;
+    linkedAt: string;
+  } | null>;
+  getLatestLinkToken(): Promise<{
+    code: string;
+    createdAt: string;
+    expiresAt: string;
+    consumedAt: string | null;
+  } | null>;
+}

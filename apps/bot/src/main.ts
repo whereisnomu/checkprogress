@@ -1,3 +1,5 @@
+import { ensureWorkspaceEnv } from '@progress-state/shared-sqlite';
+
 import { loadBotConfig } from './infra/config';
 import { createBotRuntime } from './infra/services';
 import {
@@ -10,6 +12,7 @@ import { getZonedDateParts, isReminderDue } from './infra/time';
 import { createBot } from './bot/create-bot';
 import { formatReminderMessage } from './bot/formatters';
 
+ensureWorkspaceEnv();
 const config = loadBotConfig();
 const runtime = createBotRuntime(config);
 

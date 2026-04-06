@@ -2,6 +2,7 @@ import {
   RoutineService,
   SkillService,
   TaskService,
+  TelegramLinkService,
 } from '@progress-state/shared';
 import {
   openDatabase,
@@ -9,6 +10,7 @@ import {
   SqliteRoutineRepository,
   SqliteSkillRepository,
   SqliteTaskRepository,
+  SqliteTelegramLinkRepository,
   SystemClock,
   UuidGenerator,
 } from '@progress-state/shared-sqlite';
@@ -41,6 +43,11 @@ const createTestApp = () => {
     ),
     skillService: new SkillService(
       new SqliteSkillRepository(database),
+      idGenerator,
+      clock,
+    ),
+    telegramLinkService: new TelegramLinkService(
+      new SqliteTelegramLinkRepository(database),
       idGenerator,
       clock,
     ),
@@ -81,6 +88,25 @@ describe('createApp', () => {
     expect(response.body.data.ownerChatConfigured).toBe(true);
     expect(response.body.data.remindersEnabled).toBe(true);
     expect(response.body.data.dailyReminderTime).toBe('20:00');
+  });
+
+  it('creates telegram link code and returns link status', async () => {
+    const app = createTestApp();
+
+    const createResponse = await request(app)
+      .post('/api/settings/telegram-link')
+      .send({})
+      .expect(201);
+
+    expect(createResponse.body.data.code).toHaveLength(8);
+
+    const statusResponse = await request(app)
+      .get('/api/settings/telegram-link')
+      .expect(200);
+
+    expect(statusResponse.body.data.latestLinkToken.code).toBe(
+      createResponse.body.data.code,
+    );
   });
 
   it('returns dashboard summary', async () => {

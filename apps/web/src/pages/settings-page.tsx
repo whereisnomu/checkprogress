@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -9,7 +10,8 @@ import {
 import { useSettings } from '../features/settings/settings-context';
 
 export const SettingsPage = () => {
-  const { settings, isLoading, error } = useSettings();
+  const { settings, linkStatus, isLoading, error, createLinkCode } =
+    useSettings();
 
   return (
     <main className="page-shell">
@@ -68,6 +70,23 @@ export const SettingsPage = () => {
                 <span className="font-medium">Reminder time:</span>{' '}
                 {settings.dailyReminderTime}
               </p>
+              <div className="grid gap-2 pt-2">
+                <p>
+                  <span className="font-medium">Linked chat:</span>{' '}
+                  {linkStatus?.linkedChat?.chatId ?? 'Not linked'}
+                </p>
+                <p>
+                  <span className="font-medium">Active link code:</span>{' '}
+                  {linkStatus?.latestLinkToken?.code ?? 'No active code'}
+                </p>
+                <Button type="button" onClick={() => void createLinkCode()}>
+                  Generate link code
+                </Button>
+                <p className="text-sm text-muted-foreground">
+                  After generating a code, send `/link CODE` to the bot from
+                  your Telegram chat.
+                </p>
+              </div>
             </CardContent>
           </Card>
         </div>

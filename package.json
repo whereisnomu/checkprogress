@@ -10,6 +10,7 @@
     "backup:sqlite": "powershell -ExecutionPolicy Bypass -File \"scripts/backup-sqlite.ps1\"",
     "build": "npm run build --workspaces --if-present",
     "dev": "npm run dev --workspace @progress-state/api",
+    "dev:all": "powershell -ExecutionPolicy Bypass -File \"scripts/dev-all.ps1\"",
     "export:summary": "powershell -ExecutionPolicy Bypass -File \"scripts/export-summary.ps1\"",
     "lint": "npm run lint --workspaces --if-present",
     "migrate": "npm run migrate --workspace @progress-state/api",

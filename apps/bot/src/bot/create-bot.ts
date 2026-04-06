@@ -39,6 +39,26 @@ type BotServices = {
     markStage(input: { stageId: string; note?: string }): Promise<unknown>;
     getProgressSummary(): Promise<SkillProgressSummary>;
   };
+  telegramLinkService: {
+    getLinkStatus(): Promise<{
+      linkedChat: {
+        chatId: string;
+        userId: string | null;
+        linkedAt: string;
+      } | null;
+      latestLinkToken: {
+        code: string;
+        createdAt: string;
+        expiresAt: string;
+        consumedAt: string | null;
+      } | null;
+    }>;
+    linkTelegram(input: {
+      code: string;
+      chatId: string;
+      userId?: string;
+    }): Promise<unknown>;
+  };
 };
 
 type BotConfig = {
@@ -52,8 +72,13 @@ const todayDate = () => toLocalDateString(new Date());
 
 const isAllowedChat = (
   ownerChatId: string | null,
+  linkedChatId: string | null,
   chatId: number | undefined,
 ) => {
+  if (linkedChatId) {
+    return String(chatId) === linkedChatId;
+  }
+
   if (!ownerChatId) {
     return true;
   }
@@ -70,9 +95,12 @@ export const createBot = ({
   const bot = new Bot(token);
 
   bot.use(async (context, next) => {
-    if (!isAllowedChat(ownerChatId, context.chat?.id)) {
+    const linkStatus = await services.telegramLinkService.getLinkStatus();
+    const linkedChatId = linkStatus.linkedChat?.chatId ?? null;
+
+    if (!isAllowedChat(ownerChatId, linkedChatId, context.chat?.id)) {
       await context.reply(
-        'This bot is restricted to the configured owner chat.',
+        'This bot is not linked to this chat yet. Generate a code in Settings and send /link <code>.',
       );
       return;
     }
@@ -96,6 +124,29 @@ export const createBot = ({
 
   bot.command('help', async (context) => {
     await context.reply(formatBotHelp());
+  });
+
+  bot.command('link', async (context) => {
+    const code = context.match?.trim();
+
+    if (!code || !context.chat?.id) {
+      await context.reply('Usage: /link <code>');
+      return;
+    }
+
+    try {
+      const payload = {
+        code,
+        chatId: String(context.chat.id),
+        ...(context.from?.id ? { userId: String(context.from.id) } : {}),
+      };
+      await services.telegramLinkService.linkTelegram(payload);
+      await context.reply('Telegram chat linked successfully to the panel.');
+    } catch (error) {
+      await context.reply(
+        error instanceof Error ? error.message : 'Telegram linking failed.',
+      );
+    }
   });
 
   bot.command('today', async (context) => {

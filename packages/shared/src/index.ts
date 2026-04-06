@@ -2,6 +2,7 @@ export * from './application/ports';
 export * from './application/routine-service';
 export * from './application/skill-service';
 export * from './application/task-service';
+export * from './application/telegram-link-service';
 export * from './domain/charts';
 export * from './domain/dashboard';
 export * from './domain/routine';

@@ -4,6 +4,7 @@ import {
   SkillNotFoundError,
   SkillStageNotFoundError,
   TaskNotFoundError,
+  TelegramLinkError,
   toLocalDateString,
 } from '@progress-state/shared';
 import cors from 'cors';
@@ -13,12 +14,14 @@ import type {
   RoutineService,
   SkillService,
   TaskService,
+  TelegramLinkService,
 } from '@progress-state/shared';
 
 type AppDependencies = {
   taskService: TaskService;
   routineService: RoutineService;
   skillService: SkillService;
+  telegramLinkService: TelegramLinkService;
   systemInfo: {
     webDashboardUrl: string;
     timezone: string;
@@ -33,6 +36,7 @@ export const createApp = ({
   taskService,
   routineService,
   skillService,
+  telegramLinkService,
   systemInfo,
 }: AppDependencies) => {
   const app = express();
@@ -55,6 +59,20 @@ export const createApp = ({
         dailyReminderTime: systemInfo.dailyReminderTime,
       },
     });
+  });
+
+  app.get('/api/settings/telegram-link', async (_request, response) => {
+    const status = await telegramLinkService.getLinkStatus();
+    response.json({ data: status });
+  });
+
+  app.post('/api/settings/telegram-link', async (_request, response, next) => {
+    try {
+      const linkCode = await telegramLinkService.generateLinkCode();
+      response.status(201).json({ data: linkCode });
+    } catch (error) {
+      next(error);
+    }
   });
 
   app.get('/api/tasks', async (_request, response) => {
@@ -329,6 +347,16 @@ export const createApp = ({
 
       if (error instanceof RoutineNotFoundError) {
         response.status(404).json({
+          error: {
+            message: error.message,
+          },
+        });
+
+        return;
+      }
+
+      if (error instanceof TelegramLinkError) {
+        response.status(400).json({
           error: {
             message: error.message,
           },
