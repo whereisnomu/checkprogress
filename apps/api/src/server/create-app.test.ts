@@ -56,6 +56,8 @@ const createTestApp = () => {
       timezone: 'Europe/Moscow',
       telegramEnabled: true,
       ownerChatId: '123',
+      botToken: 'token',
+      telegramBotUsername: 'ownlifetrackerbot',
       remindersEnabled: true,
       dailyReminderTime: '20:00',
     },
@@ -107,6 +109,15 @@ describe('createApp', () => {
     expect(statusResponse.body.data.latestLinkToken.code).toBe(
       createResponse.body.data.code,
     );
+  });
+
+  it('rejects invalid Telegram Web App initData', async () => {
+    const app = createTestApp();
+
+    await request(app)
+      .post('/api/telegram-webapp/verify')
+      .send({ initData: 'invalid=data' })
+      .expect(400);
   });
 
   it('returns dashboard summary', async () => {

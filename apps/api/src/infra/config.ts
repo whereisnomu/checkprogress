@@ -8,6 +8,7 @@ const configSchema = z.object({
   TZ: z.string().default('UTC'),
   BOT_TOKEN: z.string().optional(),
   TELEGRAM_OWNER_CHAT_ID: z.string().optional(),
+  TELEGRAM_BOT_USERNAME: z.string().optional(),
   REMINDERS_ENABLED: z.coerce.boolean().default(false),
   DAILY_REMINDER_TIME: z
     .string()
@@ -23,6 +24,7 @@ export type ApiConfig = {
   timezone: string;
   telegramEnabled: boolean;
   ownerChatId: string | null;
+  telegramBotUsername: string | null;
   remindersEnabled: boolean;
   dailyReminderTime: string;
 };
@@ -38,6 +40,7 @@ export const loadConfig = (env: NodeJS.ProcessEnv = process.env): ApiConfig => {
     timezone: parsed.TZ,
     telegramEnabled: Boolean(parsed.BOT_TOKEN),
     ownerChatId: parsed.TELEGRAM_OWNER_CHAT_ID ?? null,
+    telegramBotUsername: parsed.TELEGRAM_BOT_USERNAME ?? null,
     remindersEnabled: parsed.REMINDERS_ENABLED,
     dailyReminderTime: parsed.DAILY_REMINDER_TIME,
   };

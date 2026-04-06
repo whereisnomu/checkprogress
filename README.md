@@ -160,6 +160,7 @@ Operations:
 ```bash
 npm.cmd run backup:sqlite
 npm.cmd run export:summary
+npm.cmd run health:check
 ```
 
 ## Reliability
@@ -206,6 +207,12 @@ npm.cmd run test
 3. Use the dashboard export command for lightweight analytics snapshots.
 4. Run API and bot as long-lived services in production.
 5. Serve the web app behind a reverse proxy or static host.
+
+Additional references:
+
+1. `docs/runbook.md`
+2. `docs/deployment.md`
+3. `docs/release-notes.md`
 
 ## Status
 

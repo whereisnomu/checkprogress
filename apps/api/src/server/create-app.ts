@@ -17,6 +17,11 @@ import type {
   TelegramLinkService,
 } from '@progress-state/shared';
 
+import {
+  TelegramWebAppAuthError,
+  verifyTelegramWebAppInitData,
+} from '../infra/telegram-webapp';
+
 type AppDependencies = {
   taskService: TaskService;
   routineService: RoutineService;
@@ -27,6 +32,8 @@ type AppDependencies = {
     timezone: string;
     telegramEnabled: boolean;
     ownerChatId: string | null;
+    botToken: string | null;
+    telegramBotUsername: string | null;
     remindersEnabled: boolean;
     dailyReminderTime: string;
   };
@@ -55,10 +62,28 @@ export const createApp = ({
         timezone: systemInfo.timezone,
         telegramEnabled: systemInfo.telegramEnabled,
         ownerChatConfigured: Boolean(systemInfo.ownerChatId),
+        telegramBotUsername: systemInfo.telegramBotUsername,
         remindersEnabled: systemInfo.remindersEnabled,
         dailyReminderTime: systemInfo.dailyReminderTime,
       },
     });
+  });
+
+  app.post('/api/telegram-webapp/verify', async (request, response, next) => {
+    try {
+      if (!systemInfo.botToken) {
+        throw new Error('Telegram bot token is not configured');
+      }
+
+      const payload = verifyTelegramWebAppInitData(
+        String(request.body.initData ?? ''),
+        systemInfo.botToken,
+      );
+
+      response.json({ data: payload });
+    } catch (error) {
+      next(error);
+    }
   });
 
   app.get('/api/settings/telegram-link', async (_request, response) => {
@@ -356,6 +381,16 @@ export const createApp = ({
       }
 
       if (error instanceof TelegramLinkError) {
+        response.status(400).json({
+          error: {
+            message: error.message,
+          },
+        });
+
+        return;
+      }
+
+      if (error instanceof TelegramWebAppAuthError) {
         response.status(400).json({
           error: {
             message: error.message,

@@ -54,6 +54,8 @@ const app = createApp({
     timezone: config.timezone,
     telegramEnabled: config.telegramEnabled,
     ownerChatId: config.ownerChatId,
+    botToken: process.env.BOT_TOKEN ?? null,
+    telegramBotUsername: config.telegramBotUsername,
     remindersEnabled: config.remindersEnabled,
     dailyReminderTime: config.dailyReminderTime,
   },

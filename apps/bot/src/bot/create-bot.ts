@@ -112,6 +112,7 @@ const buildMainMenuKeyboard = () =>
     .text('Create', 'menu:create')
     .text('Analytics', 'menu:analytics')
     .row()
+    .text('Open App', 'webapp:open')
     .text('Settings', 'dashboard:open');
 
 const buildCreateMenuKeyboard = () =>
@@ -571,6 +572,17 @@ export const createBot = ({
   bot.callbackQuery('dashboard:open', async (context) => {
     await context.answerCallbackQuery();
     await context.reply(`Open your dashboard: ${dashboardUrl}`);
+  });
+
+  bot.callbackQuery('webapp:open', async (context) => {
+    await context.answerCallbackQuery();
+    const keyboard = new InlineKeyboard().webApp(
+      'Launch Telegram App',
+      `${dashboardUrl}/tg`,
+    );
+    await context.reply('Open the Telegram Web App:', {
+      reply_markup: keyboard,
+    });
   });
 
   bot.callbackQuery('menu:root', async (context) => {

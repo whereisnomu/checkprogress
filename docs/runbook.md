@@ -13,6 +13,7 @@
 9. Export dashboard summary and charts with `npm.cmd run export:summary`.
 10. For a single-terminal local startup use `npm.cmd run dev:all`.
 11. On Windows Explorer you can also launch everything by double-clicking `start.bat`.
+12. Verify runtime health with `npm.cmd run health:check`.
 
 ## Current State
 
@@ -30,6 +31,7 @@ The repository currently contains:
 2. Dashboard exports are available through `npm.cmd run export:summary`.
 3. Daily reminders are safe against duplicate sends for the same date via `reminder_runs`.
 4. Telegram updates are safe against duplicate processing via `processed_updates`.
+5. See `docs/deployment.md` for deployment-specific notes.
 
 ## Deployment Notes
 

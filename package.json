@@ -13,6 +13,7 @@
     "dev:services": "concurrently -k -n API,WEB,BOT -c cyan,magenta,yellow \"npm run dev --workspace @progress-state/api\" \"npm run dev --workspace @progress-state/web\" \"npm run dev --workspace @progress-state/bot\"",
     "dev:all": "npm run migrate && npm run dev:services",
     "export:summary": "powershell -ExecutionPolicy Bypass -File \"scripts/export-summary.ps1\"",
+    "health:check": "powershell -ExecutionPolicy Bypass -File \"scripts/health-check.ps1\"",
     "lint": "npm run lint --workspaces --if-present",
     "migrate": "npm run migrate --workspace @progress-state/api",
     "test": "npm run test --workspaces --if-present",

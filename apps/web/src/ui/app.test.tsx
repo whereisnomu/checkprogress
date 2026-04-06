@@ -177,6 +177,19 @@ describe('App', () => {
           } as Response;
         }
 
+        if (url.endsWith('/api/telegram-webapp/verify')) {
+          return {
+            ok: true,
+            json: async () => ({
+              data: {
+                authDate: '1775490000',
+                user: { id: 1, first_name: 'Arthur' },
+                initDataHash: 'hash',
+              },
+            }),
+          } as Response;
+        }
+
         return {
           ok: false,
           json: async () => ({ error: { message: 'Unexpected request' } }),
