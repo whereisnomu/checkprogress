@@ -84,7 +84,8 @@ export const SettingsPage = () => {
                 </Button>
                 <p className="text-sm text-muted-foreground">
                   After generating a code, send `/link CODE` to the bot from
-                  your Telegram chat.
+                  your Telegram chat. If the bot is not linked yet, `/link` is
+                  always allowed.
                 </p>
               </div>
             </CardContent>

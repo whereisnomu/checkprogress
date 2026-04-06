@@ -113,19 +113,13 @@ To run migrations and start API, web, and bot together in one terminal:
 npm.cmd run dev:all
 ```
 
+This command runs migrations first and then starts all three services with a parallel runner.
+
 On Windows you can also start everything by double-clicking:
 
 ```text
 start.bat
 ```
-
-This command:
-
-1. runs migrations
-2. starts API
-3. starts web
-4. starts bot
-5. stops child processes when you close the terminal
 
 ## Environment Variables
 

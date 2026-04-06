@@ -5,6 +5,7 @@ coverage/
 *.tsbuildinfo
 .env
 .env.*
+!.env.example
 data/sqlite/*.db
 data/sqlite/*.db-wal
 data/sqlite/*.db-shm

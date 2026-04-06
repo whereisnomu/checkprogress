@@ -23,6 +23,18 @@ const bot = createBot({
   services: runtime.services,
 });
 
+bot.catch(async (error) => {
+  console.error('Bot runtime error', error.error);
+
+  try {
+    await error.ctx.reply(
+      'An unexpected bot error occurred. Please try again or use /menu.',
+    );
+  } catch {
+    // ignore secondary reply errors
+  }
+});
+
 bot.use(async (context, next) => {
   const updateId = context.update.update_id;
 

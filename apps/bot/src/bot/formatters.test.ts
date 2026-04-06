@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  formatAnalyticsSummary,
   formatBotHelp,
   formatReminderMessage,
   formatRoutineList,
@@ -121,5 +122,18 @@ describe('bot formatters', () => {
         totalStages: 4,
       }),
     ).toContain('Open tasks: 3');
+  });
+
+  it('formats analytics summary', () => {
+    expect(
+      formatAnalyticsSummary({
+        taskDistribution: [{ label: 'Completed tasks', value: 2 }],
+        routineDistribution: [{ label: 'Done routines', value: 1 }],
+        skillDistribution: [{ label: 'Completed stages', value: 1 }],
+        taskCompletionSeries: [{ label: '2026-04-06', value: 2 }],
+        routineHeatmap: [{ label: '2026-04-06', value: 1 }],
+        routineStreakSeries: [{ label: '2026-04-06', value: 3 }],
+      }),
+    ).toContain('Analytics snapshot');
   });
 });

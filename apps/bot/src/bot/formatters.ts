@@ -1,4 +1,5 @@
 import type {
+  DashboardCharts,
   Routine,
   Skill,
   SkillStage,
@@ -92,8 +93,13 @@ export const formatStageList = (skillTitle: string, stages: SkillStage[]) => {
 export const formatBotHelp = () =>
   [
     'Available commands:',
+    '/link <code> - link this Telegram chat to the panel',
+    '/status - show current link status',
     '/today - current overview',
     '/add <title> - create a task',
+    '/new_routine - create a routine with a guided flow',
+    '/new_skill - create a skill with a guided flow',
+    '/new_stage <skill-id> - create a stage with a guided flow',
     '/tasks - list tasks with quick actions',
     '/task_done <task-id> - mark a task as done',
     '/routines - list routines with quick check-ins',
@@ -116,4 +122,32 @@ export const formatReminderMessage = (params: {
     `Skill progress: ${params.completedStages}/${params.totalStages}`,
     '',
     'Use /today for the full overview.',
+  ].join('\n');
+
+const renderBars = (
+  data: Array<{ label: string; value: number }>,
+  width = 8,
+) => {
+  const maxValue = Math.max(...data.map((item) => item.value), 1);
+
+  return data
+    .map((item) => {
+      const size = Math.round((item.value / maxValue) * width);
+      return `${item.label}: ${'█'.repeat(size)} ${item.value}`;
+    })
+    .join('\n');
+};
+
+export const formatAnalyticsSummary = (charts: DashboardCharts) =>
+  [
+    'Analytics snapshot',
+    '',
+    'Task distribution',
+    renderBars(charts.taskDistribution),
+    '',
+    'Task completion trend',
+    renderBars(charts.taskCompletionSeries.slice(-7)),
+    '',
+    'Routine streak trend',
+    renderBars(charts.routineStreakSeries.slice(-7)),
   ].join('\n');

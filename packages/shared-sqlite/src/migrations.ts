@@ -104,6 +104,17 @@ const migrations: Migration[] = [
       );
     `,
   },
+  {
+    id: '003_bot_drafts',
+    sql: `
+      CREATE TABLE IF NOT EXISTS bot_drafts (
+        chat_id TEXT PRIMARY KEY,
+        kind TEXT NOT NULL,
+        payload_json TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      );
+    `,
+  },
 ];
 
 export const runMigrations = (database: SqliteDatabase, now: string) => {

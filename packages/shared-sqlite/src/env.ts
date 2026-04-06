@@ -1,4 +1,5 @@
 import { existsSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
 import { config as loadDotenv } from 'dotenv';
@@ -11,7 +12,17 @@ export const resolveWorkspaceRoot = () => {
   while (true) {
     const packageJsonPath = path.join(currentPath, 'package.json');
     if (existsSync(packageJsonPath)) {
-      return currentPath;
+      try {
+        const packageJson = JSON.parse(
+          readFileSync(packageJsonPath, 'utf8'),
+        ) as { workspaces?: string[] };
+
+        if (Array.isArray(packageJson.workspaces)) {
+          return currentPath;
+        }
+      } catch {
+        // keep walking upward until a valid workspace root is found
+      }
     }
 
     const parentPath = path.dirname(currentPath);
