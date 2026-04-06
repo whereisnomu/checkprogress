@@ -173,4 +173,8 @@ export class RoutineService {
       ),
     };
   }
+
+  public async listEntriesInRange(startDate: string, endDate: string) {
+    return this.repository.listEntriesInRange(startDate, endDate);
+  }
 }

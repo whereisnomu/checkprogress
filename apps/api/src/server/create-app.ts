@@ -19,12 +19,21 @@ type AppDependencies = {
   taskService: TaskService;
   routineService: RoutineService;
   skillService: SkillService;
+  systemInfo: {
+    webDashboardUrl: string;
+    timezone: string;
+    telegramEnabled: boolean;
+    ownerChatId: string | null;
+    remindersEnabled: boolean;
+    dailyReminderTime: string;
+  };
 };
 
 export const createApp = ({
   taskService,
   routineService,
   skillService,
+  systemInfo,
 }: AppDependencies) => {
   const app = express();
 
@@ -33,6 +42,19 @@ export const createApp = ({
 
   app.get('/health', (_request, response) => {
     response.json({ ok: true });
+  });
+
+  app.get('/api/settings/system', (_request, response) => {
+    response.json({
+      data: {
+        webDashboardUrl: systemInfo.webDashboardUrl,
+        timezone: systemInfo.timezone,
+        telegramEnabled: systemInfo.telegramEnabled,
+        ownerChatConfigured: Boolean(systemInfo.ownerChatId),
+        remindersEnabled: systemInfo.remindersEnabled,
+        dailyReminderTime: systemInfo.dailyReminderTime,
+      },
+    });
   });
 
   app.get('/api/tasks', async (_request, response) => {
@@ -101,18 +123,31 @@ export const createApp = ({
   });
 
   app.get('/api/dashboard/charts', async (_request, response) => {
-    const today = toLocalDateString(new Date());
-    const [taskSummary, routineSummary, skillSummary] = await Promise.all([
-      taskService.getDashboardSummary(),
-      routineService.getDailySummary(today),
-      skillService.getProgressSummary(),
-    ]);
+    const now = new Date();
+    const today = toLocalDateString(now);
+    const startDate = (() => {
+      const start = new Date(now);
+      start.setDate(start.getDate() - 29);
+      return toLocalDateString(start);
+    })();
+
+    const [taskSummary, routineSummary, skillSummary, tasks, routineEntries] =
+      await Promise.all([
+        taskService.getDashboardSummary(),
+        routineService.getDailySummary(today),
+        skillService.getProgressSummary(),
+        taskService.listTasks(),
+        routineService.listEntriesInRange(startDate, today),
+      ]);
 
     response.json({
       data: buildDashboardCharts({
         taskSummary,
         routineSummary,
         skillSummary,
+        tasks,
+        routineEntries,
+        today: now,
       }),
     });
   });

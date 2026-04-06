@@ -6,6 +6,7 @@ import {
 import {
   openDatabase,
   runMigrations,
+  type SqliteDatabase,
   SqliteRoutineRepository,
   SqliteSkillRepository,
   SqliteTaskRepository,
@@ -20,9 +21,14 @@ export type BotServices = {
   skillService: SkillService;
 };
 
-export const createBotServices = (
+export type BotRuntime = {
+  database: SqliteDatabase;
+  services: BotServices;
+};
+
+export const createBotRuntime = (
   config: Pick<BotConfig, 'sqlitePath' | 'sqliteBusyTimeoutMs'>,
-): BotServices => {
+): BotRuntime => {
   const database = openDatabase(config);
   runMigrations(database, new Date().toISOString());
 
@@ -30,20 +36,23 @@ export const createBotServices = (
   const clock = new SystemClock();
 
   return {
-    taskService: new TaskService(
-      new SqliteTaskRepository(database),
-      idGenerator,
-      clock,
-    ),
-    routineService: new RoutineService(
-      new SqliteRoutineRepository(database),
-      idGenerator,
-      clock,
-    ),
-    skillService: new SkillService(
-      new SqliteSkillRepository(database),
-      idGenerator,
-      clock,
-    ),
+    database,
+    services: {
+      taskService: new TaskService(
+        new SqliteTaskRepository(database),
+        idGenerator,
+        clock,
+      ),
+      routineService: new RoutineService(
+        new SqliteRoutineRepository(database),
+        idGenerator,
+        clock,
+      ),
+      skillService: new SkillService(
+        new SqliteSkillRepository(database),
+        idGenerator,
+        clock,
+      ),
+    },
   };
 };

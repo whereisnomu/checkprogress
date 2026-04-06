@@ -23,6 +23,9 @@ export type DashboardCharts = {
   taskDistribution: { label: string; value: number }[];
   routineDistribution: { label: string; value: number }[];
   skillDistribution: { label: string; value: number }[];
+  taskCompletionSeries: { label: string; value: number }[];
+  routineHeatmap: { label: string; value: number }[];
+  routineStreakSeries: { label: string; value: number }[];
 };
 
 export type Task = {

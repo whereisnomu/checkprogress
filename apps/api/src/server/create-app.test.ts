@@ -44,6 +44,14 @@ const createTestApp = () => {
       idGenerator,
       clock,
     ),
+    systemInfo: {
+      webDashboardUrl: 'http://localhost:3000',
+      timezone: 'Europe/Moscow',
+      telegramEnabled: true,
+      ownerChatId: '123',
+      remindersEnabled: true,
+      dailyReminderTime: '20:00',
+    },
   });
 };
 
@@ -61,6 +69,18 @@ describe('createApp', () => {
     const listResponse = await request(app).get('/api/tasks').expect(200);
 
     expect(listResponse.body.data).toHaveLength(1);
+  });
+
+  it('returns system settings info', async () => {
+    const app = createTestApp();
+
+    const response = await request(app).get('/api/settings/system').expect(200);
+
+    expect(response.body.data.webDashboardUrl).toBe('http://localhost:3000');
+    expect(response.body.data.telegramEnabled).toBe(true);
+    expect(response.body.data.ownerChatConfigured).toBe(true);
+    expect(response.body.data.remindersEnabled).toBe(true);
+    expect(response.body.data.dailyReminderTime).toBe('20:00');
   });
 
   it('returns dashboard summary', async () => {
@@ -275,5 +295,8 @@ describe('createApp', () => {
       { label: 'Completed tasks', value: 0 },
       { label: 'Active tasks', value: 1 },
     ]);
+    expect(response.body.data.taskCompletionSeries).toHaveLength(7);
+    expect(response.body.data.routineHeatmap).toHaveLength(30);
+    expect(response.body.data.routineStreakSeries).toHaveLength(7);
   });
 });

@@ -10,6 +10,7 @@ import type {
 import { toLocalDateString } from '@progress-state/shared';
 
 import {
+  formatBotHelp,
   formatRoutineList,
   formatSkillList,
   formatStageList,
@@ -86,11 +87,15 @@ export const createBot = ({
     );
 
     await context.reply(
-      'Progress State started. Use /today to get your current overview.',
+      ['Progress State started.', '', formatBotHelp()].join('\n'),
       {
         reply_markup: keyboard,
       },
     );
+  });
+
+  bot.command('help', async (context) => {
+    await context.reply(formatBotHelp());
   });
 
   bot.command('today', async (context) => {

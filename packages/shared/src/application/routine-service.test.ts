@@ -51,6 +51,12 @@ class InMemoryRoutineRepository implements RoutineRepository {
       (entry) => entry.date === date,
     ) as Awaited<ReturnType<RoutineRepository['listEntriesByDate']>>;
   }
+
+  public async listEntriesInRange(startDate: string, endDate: string) {
+    return ([...this.entries.values()] as Array<{ date: string }>).filter(
+      (entry) => entry.date >= startDate && entry.date <= endDate,
+    ) as Awaited<ReturnType<RoutineRepository['listEntriesInRange']>>;
+  }
 }
 
 class SequenceIdGenerator implements IdGenerator {

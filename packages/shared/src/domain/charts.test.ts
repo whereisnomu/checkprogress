@@ -23,6 +23,29 @@ describe('buildDashboardCharts', () => {
         completedStages: 1,
         completionRate: 0.25,
       },
+      tasks: [
+        {
+          id: 'task-1',
+          title: 'Task',
+          description: null,
+          status: 'done',
+          createdAt: '2026-04-01T10:00:00.000Z',
+          updatedAt: '2026-04-06T10:00:00.000Z',
+          completedAt: '2026-04-06T10:00:00.000Z',
+        },
+      ],
+      routineEntries: [
+        {
+          id: 'entry-1',
+          routineId: 'routine-1',
+          date: '2026-04-06',
+          status: 'done',
+          note: null,
+          createdAt: '2026-04-06T10:00:00.000Z',
+          updatedAt: '2026-04-06T10:00:00.000Z',
+        },
+      ],
+      today: new Date('2026-04-06T10:00:00.000Z'),
     });
 
     expect(charts.taskDistribution).toEqual([
@@ -31,5 +54,8 @@ describe('buildDashboardCharts', () => {
     ]);
     expect(charts.routineDistribution).toHaveLength(3);
     expect(charts.skillDistribution[1]?.value).toBe(3);
+    expect(charts.taskCompletionSeries).toHaveLength(7);
+    expect(charts.routineHeatmap).toHaveLength(30);
+    expect(charts.routineStreakSeries).toHaveLength(7);
   });
 });

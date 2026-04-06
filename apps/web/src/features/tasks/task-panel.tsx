@@ -78,6 +78,12 @@ export const TaskPanel = ({ variant = 'compact' }: TaskPanelProps) => {
           <p className="text-sm text-muted-foreground">Loading tasks...</p>
         ) : null}
 
+        {!isLoading && tasks.length === 0 ? (
+          <p className="text-sm text-muted-foreground">
+            No tasks yet. Add the first task to start tracking execution.
+          </p>
+        ) : null}
+
         <div className="grid gap-3">
           {tasks.map((task) => (
             <div

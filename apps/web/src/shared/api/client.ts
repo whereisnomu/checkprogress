@@ -33,6 +33,15 @@ type SkillStageProgress = {
   updatedAt: string;
 };
 
+type SystemSettings = {
+  webDashboardUrl: string;
+  timezone: string;
+  telegramEnabled: boolean;
+  ownerChatConfigured: boolean;
+  remindersEnabled: boolean;
+  dailyReminderTime: string;
+};
+
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3001';
 
 const parseResponse = async <T>(response: Response): Promise<T> => {
@@ -274,5 +283,10 @@ export const apiClient = {
     );
 
     return parseResponse<SkillStageProgress>(response);
+  },
+
+  async getSystemSettings() {
+    const response = await fetch(`${apiBaseUrl}/api/settings/system`);
+    return parseResponse<SystemSettings>(response);
   },
 };

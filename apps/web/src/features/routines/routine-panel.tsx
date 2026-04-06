@@ -81,6 +81,12 @@ export const RoutinePanel = ({ variant = 'compact' }: RoutinePanelProps) => {
           <p className="text-sm text-muted-foreground">Loading routines...</p>
         ) : null}
 
+        {!isLoading && routines.length === 0 ? (
+          <p className="text-sm text-muted-foreground">
+            No routines yet. Add a daily routine to start building streaks.
+          </p>
+        ) : null}
+
         <div className="grid gap-3">
           {routines.map((routine) => (
             <div

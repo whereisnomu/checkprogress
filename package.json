@@ -7,8 +7,10 @@
     "packages/*"
   ],
   "scripts": {
+    "backup:sqlite": "powershell -ExecutionPolicy Bypass -File \"scripts/backup-sqlite.ps1\"",
     "build": "npm run build --workspaces --if-present",
     "dev": "npm run dev --workspace @progress-state/api",
+    "export:summary": "powershell -ExecutionPolicy Bypass -File \"scripts/export-summary.ps1\"",
     "lint": "npm run lint --workspaces --if-present",
     "migrate": "npm run migrate --workspace @progress-state/api",
     "test": "npm run test --workspaces --if-present",

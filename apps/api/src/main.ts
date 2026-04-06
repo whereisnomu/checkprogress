@@ -40,6 +40,14 @@ const app = createApp({
     idGenerator,
     clock,
   ),
+  systemInfo: {
+    webDashboardUrl: config.webDashboardUrl,
+    timezone: config.timezone,
+    telegramEnabled: config.telegramEnabled,
+    ownerChatId: config.ownerChatId,
+    remindersEnabled: config.remindersEnabled,
+    dailyReminderTime: config.dailyReminderTime,
+  },
 });
 
 app.listen(config.port, () => {

@@ -22,6 +22,10 @@ export interface RoutineRepository {
     date: string,
   ): Promise<RoutineEntry | null>;
   listEntriesByDate(date: string): Promise<RoutineEntry[]>;
+  listEntriesInRange(
+    startDate: string,
+    endDate: string,
+  ): Promise<RoutineEntry[]>;
 }
 
 export interface SkillRepository {

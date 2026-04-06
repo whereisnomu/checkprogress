@@ -88,6 +88,12 @@ export const SkillPanel = () => {
         <p className="text-sm text-muted-foreground">Loading skills...</p>
       ) : null}
 
+      {!isLoading && skills.length === 0 ? (
+        <p className="text-sm text-muted-foreground">
+          No skills yet. Add a skill and break it down into stages.
+        </p>
+      ) : null}
+
       <div className="grid gap-4">
         {skills.map((skill) => (
           <Card key={skill.id} className="bg-card/80 backdrop-blur">

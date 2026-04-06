@@ -6,6 +6,12 @@ const configSchema = z.object({
   TELEGRAM_OWNER_CHAT_ID: z.string().optional(),
   SQLITE_PATH: z.string().min(1).default('./data/sqlite/progress-state.db'),
   SQLITE_BUSY_TIMEOUT_MS: z.coerce.number().int().positive().default(5000),
+  TZ: z.string().default('UTC'),
+  REMINDERS_ENABLED: z.coerce.boolean().default(false),
+  DAILY_REMINDER_TIME: z
+    .string()
+    .regex(/^\d{2}:\d{2}$/)
+    .default('20:00'),
 });
 
 export type BotConfig = {
@@ -14,6 +20,9 @@ export type BotConfig = {
   ownerChatId: string | null;
   sqlitePath: string;
   sqliteBusyTimeoutMs: number;
+  timeZone: string;
+  remindersEnabled: boolean;
+  dailyReminderTime: string;
 };
 
 export const loadBotConfig = (
@@ -27,5 +36,8 @@ export const loadBotConfig = (
     ownerChatId: parsed.TELEGRAM_OWNER_CHAT_ID ?? null,
     sqlitePath: parsed.SQLITE_PATH,
     sqliteBusyTimeoutMs: parsed.SQLITE_BUSY_TIMEOUT_MS,
+    timeZone: parsed.TZ,
+    remindersEnabled: parsed.REMINDERS_ENABLED,
+    dailyReminderTime: parsed.DAILY_REMINDER_TIME,
   };
 };

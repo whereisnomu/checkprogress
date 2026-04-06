@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  formatBotHelp,
+  formatReminderMessage,
   formatRoutineList,
   formatSkillList,
   formatStageList,
@@ -103,5 +105,21 @@ describe('bot formatters', () => {
         },
       ]),
     ).toContain('Context state');
+  });
+
+  it('formats bot help', () => {
+    expect(formatBotHelp()).toContain('/today');
+    expect(formatBotHelp()).toContain('/skills');
+  });
+
+  it('formats reminder message', () => {
+    expect(
+      formatReminderMessage({
+        openTasks: 3,
+        routinesConfigured: 2,
+        completedStages: 1,
+        totalStages: 4,
+      }),
+    ).toContain('Open tasks: 3');
   });
 });

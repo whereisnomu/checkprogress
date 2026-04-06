@@ -8,6 +8,9 @@
 4. Start API with `npm.cmd run dev --workspace @progress-state/api`.
 5. Start web with `npm.cmd run dev --workspace @progress-state/web`.
 6. Start bot with `npm.cmd run dev --workspace @progress-state/bot` after `BOT_TOKEN` is configured.
+7. Optional: enable reminders with `REMINDERS_ENABLED=true` and set `DAILY_REMINDER_TIME=HH:MM`.
+8. Create a SQLite backup with `npm.cmd run backup:sqlite`.
+9. Export dashboard summary and charts with `npm.cmd run export:summary`.
 
 ## Current State
 
@@ -17,6 +20,22 @@ The repository currently contains:
 - Express API with task and dashboard summary endpoints backed by SQLite
 - web dashboard shell with summary cards
 - Telegram bot integrated with shared task and routine flows
+- Telegram help flows, update idempotency foundation, and reminder settings support
+
+## Operations
+
+1. SQLite backups are file-based and can be created with `npm.cmd run backup:sqlite`.
+2. Dashboard exports are available through `npm.cmd run export:summary`.
+3. Daily reminders are safe against duplicate sends for the same date via `reminder_runs`.
+4. Telegram updates are safe against duplicate processing via `processed_updates`.
+
+## Deployment Notes
+
+1. Keep API, web, and bot under the same `.env` source where possible.
+2. Use a persistent disk for `data/sqlite` and `data/backups`.
+3. Back up the SQLite file before dependency or schema upgrades.
+4. For VPS deployment, run API and bot as long-lived services and serve web as static assets or via `vite preview` behind a reverse proxy.
+5. Set `TZ`, `REMINDERS_ENABLED`, and `DAILY_REMINDER_TIME` explicitly in production.
 
 ## Next Backend Step
 

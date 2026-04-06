@@ -185,4 +185,19 @@ export class SqliteRoutineRepository implements RoutineRepository {
 
     return rows.map(mapRoutineEntryRow);
   }
+
+  public async listEntriesInRange(startDate: string, endDate: string) {
+    const rows = this.database
+      .prepare(
+        `
+          SELECT id, routine_id, entry_date, status, note, created_at, updated_at
+          FROM routine_entries
+          WHERE entry_date >= ? AND entry_date <= ?
+          ORDER BY entry_date ASC
+        `,
+      )
+      .all(startDate, endDate) as RoutineEntryRow[];
+
+    return rows.map(mapRoutineEntryRow);
+  }
 }

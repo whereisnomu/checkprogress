@@ -26,6 +26,9 @@ export const AppShell = () => (
         <NavLink to="/skills" className={navClassName}>
           Skills
         </NavLink>
+        <NavLink to="/settings" className={navClassName}>
+          Settings
+        </NavLink>
       </nav>
     </aside>
 

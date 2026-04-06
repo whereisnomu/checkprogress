@@ -61,6 +61,28 @@ describe('App', () => {
                   { label: 'Completed stages', value: 2 },
                   { label: 'Open stages', value: 2 },
                 ],
+                taskCompletionSeries: [
+                  { label: '2026-04-01', value: 0 },
+                  { label: '2026-04-02', value: 1 },
+                  { label: '2026-04-03', value: 0 },
+                  { label: '2026-04-04', value: 1 },
+                  { label: '2026-04-05', value: 0 },
+                  { label: '2026-04-06', value: 2 },
+                  { label: '2026-04-07', value: 0 },
+                ],
+                routineHeatmap: Array.from({ length: 30 }, (_, index) => ({
+                  label: `2026-03-${String(index + 1).padStart(2, '0')}`,
+                  value: index % 3 === 0 ? 1 : 0,
+                })),
+                routineStreakSeries: [
+                  { label: '2026-04-01', value: 0 },
+                  { label: '2026-04-02', value: 1 },
+                  { label: '2026-04-03', value: 2 },
+                  { label: '2026-04-04', value: 3 },
+                  { label: '2026-04-05', value: 0 },
+                  { label: '2026-04-06', value: 1 },
+                  { label: '2026-04-07', value: 2 },
+                ],
               },
             }),
           } as Response;
@@ -122,6 +144,22 @@ describe('App', () => {
           } as Response;
         }
 
+        if (url.endsWith('/api/settings/system')) {
+          return {
+            ok: true,
+            json: async () => ({
+              data: {
+                webDashboardUrl: 'http://localhost:3000',
+                timezone: 'Europe/Moscow',
+                telegramEnabled: true,
+                ownerChatConfigured: true,
+                remindersEnabled: true,
+                dailyReminderTime: '20:00',
+              },
+            }),
+          } as Response;
+        }
+
         return {
           ok: false,
           json: async () => ({ error: { message: 'Unexpected request' } }),
@@ -148,6 +186,12 @@ describe('App', () => {
     expect(await screen.findByText('Skills tracked')).toBeInTheDocument();
     expect(await screen.findByText('Skill completion')).toBeInTheDocument();
     expect(await screen.findByText('Task Distribution')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Task Completion Trend'),
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByText('Routine Activity Heatmap'),
+    ).toBeInTheDocument();
     expect(
       await screen.findByRole('heading', { name: 'Tasks' }),
     ).toBeInTheDocument();
@@ -219,5 +263,22 @@ describe('App', () => {
       await screen.findByText('Track skills and progressive stages'),
     ).toBeInTheDocument();
     expect(await screen.findByText('TypeScript')).toBeInTheDocument();
+  });
+
+  it('renders settings workspace', async () => {
+    render(<App />);
+
+    const [settingsNavLink] = await screen.findAllByRole('link', {
+      name: 'Settings',
+    });
+    expect(settingsNavLink).toBeDefined();
+    fireEvent.click(settingsNavLink as HTMLElement);
+
+    expect(
+      await screen.findByText('System and integration status'),
+    ).toBeInTheDocument();
+    expect(await screen.findByText('Europe/Moscow')).toBeInTheDocument();
+    expect((await screen.findAllByText('Yes')).length).toBe(3);
+    expect(await screen.findByText('20:00')).toBeInTheDocument();
   });
 });

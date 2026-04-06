@@ -83,6 +83,21 @@ export const DashboardPage = () => {
             subtitle="Completed versus open skill stages"
             data={charts.skillDistribution}
           />
+          <ChartCard
+            title="Task Completion Trend"
+            subtitle="Completed tasks over the last 7 days"
+            data={charts.taskCompletionSeries}
+          />
+          <ChartCard
+            title="Routine Activity Heatmap"
+            subtitle="Completed routine check-ins over the last 30 days"
+            data={charts.routineHeatmap}
+          />
+          <ChartCard
+            title="Routine Streak Trend"
+            subtitle="Consecutive active days over the last week"
+            data={charts.routineStreakSeries}
+          />
         </section>
       ) : null}
 
