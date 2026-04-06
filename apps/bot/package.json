@@ -1,0 +1,22 @@
+{
+  "name": "@progress-state/bot",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx watch src/main.ts",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@progress-state/shared": "0.1.0",
+    "@progress-state/shared-sqlite": "0.1.0",
+    "grammy": "^1.38.3",
+    "zod": "^4.1.11"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.5"
+  }
+}

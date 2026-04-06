@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022", "DOM"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@progress-state/shared": ["packages/shared/src/index.ts"],
+      "@progress-state/shared/*": ["packages/shared/src/*"],
+      "@progress-state/shared-sqlite": ["packages/shared-sqlite/src/index.ts"],
+      "@progress-state/shared-sqlite/*": ["packages/shared-sqlite/src/*"]
+    }
+  }
+}
